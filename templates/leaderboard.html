@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Global Leaderboard - Cricket Clash{% endblock %}
+
+{% block content %}
+<main class="container">
+
+  <div style="text-align: center; margin-bottom: 2.5rem;">
+    <div class="hero-tag">🏆 Hall of Champions</div>
+    <h1 style="font-size: 2.8rem; color: #fff; margin-bottom: 0.5rem;">GLOBAL LEADERBOARD</h1>
+    <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 600px; margin: 0 auto;">
+      Dynamic rankings generated strictly from verified database records. Ranked by total wins, runs scored, and win efficiency.
+    </p>
+  </div>
+
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 80px;">Rank</th>
+          <th>Player</th>
+          <th>Matches</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Draws</th>
+          <th>Total Runs</th>
+          <th>Highest Score</th>
+          <th>Win Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if leaderboard and leaderboard|length > 0 %}
+          {% for p in leaderboard %}
+            <tr {% if current_user == p.Username %}style="background: rgba(0, 230, 118, 0.08); border-left: 4px solid var(--primary);"{% endif %}>
+              <td>
+                <span class="rank-badge rank-{{ p.rank if p.rank <= 3 else 'other' }}">
+                  {{ p.rank }}
+                </span>
+              </td>
+              <td style="font-weight: 700; color: #fff;">
+                👤 {{ p.Username }}
+                {% if current_user == p.Username %}
+                  <span class="nav-badge" style="margin-left: 0.5rem;">YOU</span>
+                {% endif %}
+              </td>
+              <td>{{ p.Games_played }}</td>
+              <td style="color: var(--primary); font-weight: 700;">{{ p.No_of_wins }}</td>
+              <td style="color: #ff5252;">{{ p.No_of_losses }}</td>
+              <td style="color: var(--accent);">{{ p.No_of_draws }}</td>
+              <td style="font-weight: 700; color: var(--secondary);">{{ p.Runs_scored }}</td>
+              <td style="font-weight: 700;">{{ p.Highest_score or 0 }}</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span style="font-weight: 700; color: #fff; width: 45px;">{{ p.win_percentage }}%</span>
+                  <div style="flex: 1; height: 6px; background: #1e293b; border-radius: 999px; overflow: hidden; min-width: 60px;">
+                    <div style="height: 100%; width: {{ p.win_percentage }}%; background: linear-gradient(90deg, var(--secondary), var(--primary)); border-radius: 999px;"></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 3rem;">
+              No matches recorded yet. Play a match to be the #1 player!
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align: center; margin-top: 2.5rem;">
+    <a href="{{ url_for('game_arena', new=1) }}" class="btn-primary nav-btn" style="padding: 0.85rem 2rem; font-size: 1.05rem;">
+      🏏 Play Match &amp; Climb Ranks
+    </a>
+  </div>
+
+</main>
+{% endblock %}

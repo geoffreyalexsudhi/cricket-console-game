@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Cricket Clash - Modern Cricket Gaming Arena{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('index') }}" class="brand">
+        <span class="brand-icon">🏏</span>
+        <span>CRICKET<span class="brand-accent">CLASH</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}" class="nav-link">Home</a></li>
+        <li><a href="{{ url_for('game_arena', new=1) }}" class="nav-link">Play Match</a></li>
+        <li><a href="{{ url_for('tournament') }}" class="nav-link">Tournament</a></li>
+        <li><a href="{{ url_for('leaderboard') }}" class="nav-link">Leaderboard</a></li>
+        <li><a href="{{ url_for('rules') }}" class="nav-link">Rules</a></li>
+        
+        {% if current_user %}
+          <li><a href="{{ url_for('profile') }}" class="nav-link">👤 {{ current_user }}</a></li>
+          <li><a href="{{ url_for('logout') }}" class="nav-btn btn-secondary">Logout</a></li>
+        {% else %}
+          <li><a href="{{ url_for('login') }}" class="nav-link">Login</a></li>
+          <li><a href="{{ url_for('register') }}" class="nav-btn btn-primary">Join Free</a></li>
+        {% endif %}
+
+        <li>
+          <button id="toggleSoundBtn" class="nav-badge" style="background: transparent; cursor: pointer; border: 1px solid var(--card-border); color: var(--text-muted);">
+            🔊 Sound
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-messages">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <span>{{ message }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Content Container -->
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <strong>CRICKET CLASH</strong> &bull; Original Hand Cricket / Odd-Even Web Edition
+      </div>
+      <div>
+        <span class="nav-badge">DB Engine: {{ db_engine }}</span>
+        &nbsp;&bull;&nbsp; Built with Python Flask &amp; MySQL
+      </div>
+    </div>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

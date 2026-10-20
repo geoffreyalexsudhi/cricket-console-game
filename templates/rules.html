@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Rules &amp; How to Play - Cricket Clash{% endblock %}
+
+{% block content %}
+<main class="container">
+
+  <div style="text-align: center; margin-bottom: 2.5rem;">
+    <div class="hero-tag">📖 Complete Rulebook</div>
+    <h1 style="font-size: 2.8rem; color: #fff; margin-bottom: 0.5rem;">HOW TO PLAY CRICKET CLASH</h1>
+    <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 620px; margin: 0 auto;">
+      Based on the traditional Indian Hand Cricket / Odd or Even game, upgraded into a competitive modern web game.
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+    
+    <!-- Rule Card 1: The Toss -->
+    <div class="mode-card">
+      <div class="mode-icon">🪙</div>
+      <h3 class="mode-title">1. The Odd-Even Toss</h3>
+      <p class="mode-desc">
+        At the start of every match:
+      </p>
+      <ul style="color: var(--text-muted); font-size: 0.92rem; display: flex; flex-direction: column; gap: 0.5rem;">
+        <li>Choose your call: <strong>1. Odd</strong> or <strong>2. Even</strong>.</li>
+        <li>Enter any number between <strong>0 and 6</strong>.</li>
+        <li>The computer simultaneously picks a number between 0 and 6.</li>
+        <li>Sum = Your Number + Computer Number.</li>
+        <li>If the sum parity matches your call, <strong>you win the toss</strong> and choose to Bat or Bowl!</li>
+      </ul>
+    </div>
+
+    <!-- Rule Card 2: Batting & Scoring -->
+    <div class="mode-card">
+      <div class="mode-icon">🏏</div>
+      <h3 class="mode-title">2. Batting &amp; Scoring Runs</h3>
+      <p class="mode-desc">
+        When you are batting:
+      </p>
+      <ul style="color: var(--text-muted); font-size: 0.92rem; display: flex; flex-direction: column; gap: 0.5rem;">
+        <li>Select a shot number from <strong>0 to 6</strong>.</li>
+        <li>If your number matches the bowler's number &rarr; <strong>OUT!</strong> (Wicket lost).</li>
+        <li>If the numbers are different &rarr; You score runs equal to your chosen number!</li>
+        <li>0 = Dot ball (Safe defense, zero runs).</li>
+        <li>4 = Boundary Four! &bull; 6 = Maximum Six!</li>
+      </ul>
+    </div>
+
+    <!-- Rule Card 3: Bowling & Wickets -->
+    <div class="mode-card">
+      <div class="mode-icon">🎯</div>
+      <h3 class="mode-title">3. Bowling &amp; Taking Wickets</h3>
+      <p class="mode-desc">
+        When you are bowling:
+      </p>
+      <ul style="color: var(--text-muted); font-size: 0.92rem; display: flex; flex-direction: column; gap: 0.5rem;">
+        <li>Select your delivery number from <strong>0 to 6</strong>.</li>
+        <li>Anticipate what the computer batsman will play.</li>
+        <li>If your delivery matches the computer's number &rarr; <strong>WICKET!</strong> The computer is OUT!</li>
+        <li>If they differ, computer adds their chosen number to their total score.</li>
+      </ul>
+    </div>
+
+    <!-- Rule Card 4: Target & Chasing -->
+    <div class="mode-card">
+      <div class="mode-icon">🏁</div>
+      <h3 class="mode-title">4. Chasing &amp; Winning</h3>
+      <p class="mode-desc">
+        Match conclusion rules:
+      </p>
+      <ul style="color: var(--text-muted); font-size: 0.92rem; display: flex; flex-direction: column; gap: 0.5rem;">
+        <li><strong>Target:</strong> In the 2nd innings, the chasing side needs 1 run more than the 1st innings total (`Target = 1st Innings Runs + 1`).</li>
+        <li><strong>Instant Win:</strong> As soon as the chasing team exceeds the 1st innings score, they win immediately!</li>
+        <li><strong>All Out / Overs:</strong> If all wickets fall or overs finish before target is reached, the defending side wins!</li>
+        <li><strong>Tie / Draw:</strong> If scores are exactly equal when the 2nd innings ends, the match is drawn.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div style="text-align: center;">
+    <a href="{{ url_for('game_arena', new=1) }}" class="btn-primary nav-btn" style="padding: 0.9rem 2.2rem; font-size: 1.1rem;">
+      🏏 Ready? Play a Match Now!
+    </a>
+  </div>
+
+</main>
+{% endblock %}

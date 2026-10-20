@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Create Player Account - Cricket Clash{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <span style="font-size: 3rem;">⚡</span>
+        <h2 style="font-size: 2rem; color: #fff; margin-top: 0.5rem;">JOIN THE CLASH</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Create your player profile, record stats, and climb the ranks</p>
+      </div>
+
+      <form method="POST" action="{{ url_for('register') }}">
+        <div class="form-group">
+          <label class="form-label" for="username">Player Username</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Choose a unique username" maxlength="250" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="At least 4 characters" required autocomplete="new-password">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="confirm_password">Confirm Password</label>
+          <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Repeat your password" required autocomplete="new-password">
+        </div>
+
+        <button type="submit" class="btn-primary nav-btn" style="width: 100%; padding: 0.85rem; font-size: 1.05rem; margin-top: 1rem;">
+          Create Player Profile
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+        Already have a profile? <a href="{{ url_for('login') }}" style="color: var(--primary); font-weight: 600;">Log In</a>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

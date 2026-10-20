@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Cricket Clash - The Ultimate Online Cricket Gaming Experience{% endblock %}
+
+{% block content %}
+<main class="container">
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-tag">⚡ The Classic Hand Cricket Revolution</div>
+    <h1 class="hero-title">CRICKET <span>CLASH</span></h1>
+    <p class="hero-subtitle">
+      Step onto the digital pitch! Challenge intelligent AI opponents in an authentic 
+      odd-or-even cricket clash with real-time scoring, wicket physics, and live stadium commentary.
+    </p>
+
+    <div class="hero-actions">
+      <a href="{{ url_for('game_arena', mode='quick', new=1) }}" class="btn-primary btn-hero">
+        <span>🏏 Start Quick Match (2 Overs)</span>
+      </a>
+      <a href="{{ url_for('tournament') }}" class="btn-secondary btn-hero">
+        <span>🏆 Enter Tournament</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Game Modes Grid -->
+  <section style="margin-bottom: 3rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h2 style="font-size: 2.2rem; color: #fff;">CHOOSE YOUR MATCH FORMAT</h2>
+      <p style="color: var(--text-muted);">From high-octane 2-over blitzes to the authentic endless classic</p>
+    </div>
+
+    <div class="modes-grid">
+      <!-- Quick Match -->
+      <div class="mode-card featured">
+        <span class="mode-badge">Fast &amp; Intense</span>
+        <div class="mode-icon">⚡</div>
+        <h3 class="mode-title">Quick Match</h3>
+        <p class="mode-desc">2 Overs, 2 Wickets. Fast-paced 3-minute blitz. Ideal for adrenaline-fueled breaks.</p>
+        <div class="mode-stats">
+          <span>⏱️ 2 Overs</span>
+          <span>🎯 2 Wickets</span>
+          <span>🤖 Smart AI</span>
+        </div>
+        <a href="{{ url_for('game_arena', mode='quick', new=1) }}" class="btn-primary nav-btn" style="text-align: center;">
+          Play Quick Match
+        </a>
+      </div>
+
+      <!-- Limited Overs -->
+      <div class="mode-card">
+        <div class="mode-icon">🔥</div>
+        <h3 class="mode-title">Limited Overs (T5)</h3>
+        <p class="mode-desc">5 Overs, 3 Wickets. Balance defense and aggressive boundaries to chase or defend the target.</p>
+        <div class="mode-stats">
+          <span>⏱️ 5 Overs</span>
+          <span>🎯 3 Wickets</span>
+          <span>📊 Run Rates</span>
+        </div>
+        <a href="{{ url_for('game_arena', mode='limited', new=1) }}" class="btn-secondary nav-btn" style="text-align: center;">
+          Play T5 Clash
+        </a>
+      </div>
+
+      <!-- Classic Endless -->
+      <div class="mode-card">
+        <span class="mode-badge" style="background: var(--accent); color: #000;">Original Rules</span>
+        <div class="mode-icon">📜</div>
+        <h3 class="mode-title">Classic Endless</h3>
+        <p class="mode-desc">The authentic original game! Choose your wickets, play without ball limits until all out or 200 runs cap.</p>
+        <div class="mode-stats">
+          <span>⏱️ Unlimited Balls</span>
+          <span>🎯 Custom Wickets</span>
+          <span>💯 200 Runs Cap</span>
+        </div>
+        <a href="{{ url_for('game_arena', mode='classic', new=1) }}" class="btn-secondary nav-btn" style="text-align: center;">
+          Play Classic
+        </a>
+      </div>
+
+      <!-- Tournament Mode -->
+      <div class="mode-card">
+        <span class="mode-badge" style="background: var(--secondary); color: #000;">Championship</span>
+        <div class="mode-icon">🏆</div>
+        <h3 class="mode-title">Tournament Cup</h3>
+        <p class="mode-desc">Compete in a 3-stage knockout against international powerhouses: QF, Semi-Final, and Grand Final!</p>
+        <div class="mode-stats">
+          <span>⚔️ 3 Stages</span>
+          <span>🥇 Trophy</span>
+          <span>📈 Match History</span>
+        </div>
+        <a href="{{ url_for('tournament') }}" class="btn-secondary nav-btn" style="text-align: center;">
+          Start Tournament
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Mini Leaderboard -->
+  <section style="margin-bottom: 3.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.25rem;">
+      <div>
+        <h2 style="font-size: 1.8rem; color: #fff;">TOP PLAYERS LEADERBOARD</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Real statistics from completed matches recorded in the database</p>
+      </div>
+      <a href="{{ url_for('leaderboard') }}" style="font-weight: 700; font-size: 0.95rem;">View All Rankings &rarr;</a>
+    </div>
+
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 80px;">Rank</th>
+            <th>Player</th>
+            <th>Matches</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Total Runs</th>
+            <th>Win Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if leaderboard and leaderboard|length > 0 %}
+            {% for p in leaderboard %}
+              <tr>
+                <td>
+                  <span class="rank-badge rank-{{ p.rank if p.rank <= 3 else 'other' }}">
+                    {{ p.rank }}
+                  </span>
+                </td>
+                <td style="font-weight: 700; color: #fff;">
+                  👤 {{ p.Username }}
+                </td>
+                <td>{{ p.Games_played }}</td>
+                <td style="color: var(--primary); font-weight: 700;">{{ p.No_of_wins }}</td>
+                <td style="color: #ff5252;">{{ p.No_of_losses }}</td>
+                <td style="font-weight: 700;">{{ p.Runs_scored }}</td>
+                <td>
+                  <span style="color: var(--accent); font-weight: 700;">{{ p.win_percentage }}%</span>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
+                No matches recorded yet. Be the first champion on the leaderboard!
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- How to Play Teaser -->
+  <section style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 2rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: center;">
+      <div>
+        <h3 style="font-size: 1.6rem; color: #fff; margin-bottom: 0.5rem;">How Hand Cricket Works</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.25rem;">
+          In Hand Cricket (Odd-Even), both the batsman and bowler select a number from 0 to 6 simultaneously.
+        </p>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.92rem;">
+          <li>💥 <strong>Same Number?</strong> OUT! The batsman loses a wicket.</li>
+          <li>🏏 <strong>Different Numbers?</strong> Batsman scores runs equal to their chosen number!</li>
+          <li>🪙 <strong>Toss:</strong> Call Odd or Even, throw numbers, and choose Bat or Bowl.</li>
+        </ul>
+      </div>
+      <div style="text-align: center;">
+        <a href="{{ url_for('rules') }}" class="btn-outline nav-btn" style="padding: 0.8rem 1.8rem; font-size: 1rem;">
+          Read Full Cricket Clash Rules &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+{% endblock %}

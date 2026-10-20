@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}Cricket Clash - Live Stadium Arena{% endblock %}
+
+{% block content %}
+<main class="container">
+
+  <!-- Confetti Canvas for Victory Celebrations -->
+  <canvas id="confettiCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 3000;"></canvas>
+
+  <div class="arena-layout">
+
+    <!-- Primary Stage: Stadium Pitch & Controls -->
+    <div class="stadium-stage">
+
+      <!-- Live Digital Scoreboard -->
+      <div class="live-scoreboard">
+        <!-- Batting Team Info -->
+        <div class="team-badge">
+          <div class="team-avatar">🏏</div>
+          <div>
+            <div id="dispBattingTeam" class="team-role">YOU ARE BATTING</div>
+            <div id="dispBowlingTeam" style="font-size: 0.85rem; color: var(--text-muted);">Bowler: Computer</div>
+          </div>
+        </div>
+
+        <!-- Center Score -->
+        <div class="score-display">
+          <div class="main-score">
+            <span id="dispRuns" class="score-runs">0</span>
+            <span class="score-divider">/</span>
+            <span id="dispWickets" class="score-wickets">0</span>
+          </div>
+          <div class="score-overs">
+            Overs: <span id="dispOvers">0.0</span> <span id="dispMaxOvers">(2 ov)</span>
+            &bull; <span id="dispRunRate">CRR: 0.00</span>
+          </div>
+        </div>
+
+        <!-- Target / Chase Status -->
+        <div>
+          <div id="targetBadge" class="target-badge" style="display: none;">
+            <div class="target-label">Target</div>
+            <div id="targetNum" class="target-num">0</div>
+          </div>
+          <div id="equationText" style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-top: 0.35rem;">
+            1st Innings • Setting Target
+          </div>
+        </div>
+      </div>
+
+      <!-- Stadium Pitch Visualizer -->
+      <div class="pitch-container">
+        <!-- Pitch Center Strip -->
+        <div class="pitch-strip">
+          <!-- Top Stumps & Crease -->
+          <div class="stumps stumps-top">
+            <div class="stump"></div>
+            <div class="stump"></div>
+            <div class="stump"></div>
+          </div>
+          <div class="crease-line crease-top"></div>
+
+          <!-- Animated Ball -->
+          <div id="pitchBall" class="ball-object"></div>
+
+          <!-- Bottom Stumps & Crease -->
+          <div class="crease-line crease-bottom"></div>
+          <div class="stumps stumps-bottom">
+            <div class="stump"></div>
+            <div class="stump"></div>
+            <div class="stump"></div>
+          </div>
+        </div>
+
+        <!-- Pop-up Graphic for Boundaries / Wickets -->
+        <div id="eventPop" class="event-pop">4</div>
+      </div>
+
+      <!-- Recent Balls Timeline -->
+      <div class="timeline-bar">
+        <span class="timeline-title">This Over:</span>
+        <div id="timelineContainer" style="display: flex; gap: 0.4rem; align-items: center;">
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Awaiting delivery...</span>
+        </div>
+      </div>
+
+      <!-- Interactive Controls Pad -->
+      <div class="controls-pad">
+        <div id="controlInstruction" class="control-instruction">
+          Choose your shot <strong>(0 - 6)</strong>. Avoid matching the bowler's number!
+        </div>
+
+        <div class="shot-buttons-grid">
+          <button class="shot-btn" data-num="0">
+            <span class="shot-num">0</span>
+            <span class="shot-label">Defend</span>
+          </button>
+          <button class="shot-btn" data-num="1">
+            <span class="shot-num">1</span>
+            <span class="shot-label">Single</span>
+          </button>
+          <button class="shot-btn" data-num="2">
+            <span class="shot-num">2</span>
+            <span class="shot-label">Double</span>
+          </button>
+          <button class="shot-btn" data-num="3">
+            <span class="shot-num">3</span>
+            <span class="shot-label">Triple</span>
+          </button>
+          <button class="shot-btn" data-num="4">
+            <span class="shot-num" style="color: var(--secondary);">4</span>
+            <span class="shot-label">Boundary</span>
+          </button>
+          <button class="shot-btn" data-num="5">
+            <span class="shot-num">5</span>
+            <span class="shot-label">Five</span>
+          </button>
+          <button class="shot-btn" data-num="6">
+            <span class="shot-num" style="color: var(--accent);">6</span>
+            <span class="shot-label">Maximum</span>
+          </button>
+        </div>
+
+        <div style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
+          💡 Tip: You can also press numeric keys <kbd style="background: #1e293b; padding: 0.2rem 0.4rem; border-radius: 4px;">0</kbd> to <kbd style="background: #1e293b; padding: 0.2rem 0.4rem; border-radius: 4px;">6</kbd> on your keyboard.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar: Commentary & Match Context -->
+    <div class="arena-sidebar">
+      <div class="commentary-box">
+        <div class="commentary-header">
+          <h3 style="font-size: 1.1rem; color: #fff;">LIVE COMMENTARY</h3>
+          <span class="nav-badge">Ball-by-Ball</span>
+        </div>
+        <div id="commentaryList" class="commentary-list">
+          <div class="comm-item">
+            <div class="comm-meta"><span>Match Setup</span></div>
+            <p>Welcome to the stadium! Players are taking the field. Toss is ready.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       MODALS: TOSS, INNINGS BREAK, RESULT
+       ========================================== -->
+
+  <!-- 1. Authentic Odd-Even Toss Modal -->
+  <div id="tossModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-icon">🪙</div>
+      <h2 class="modal-title">THE TOSS</h2>
+      <p class="modal-subtitle">Original Odd or Even Hand Cricket Toss</p>
+
+      <div id="tossStep1">
+        <div style="font-weight: 700; margin-bottom: 0.6rem; color: #fff;">1. Choose Call:</div>
+        <div class="toss-options-grid">
+          <button class="toss-choice-btn selected" data-call="1">
+            ⚡ 1. ODD
+          </button>
+          <button class="toss-choice-btn" data-call="2">
+            🛡️ 2. EVEN
+          </button>
+        </div>
+
+        <div style="font-weight: 700; margin-bottom: 0.6rem; color: #fff;">2. Choose Number (0 to 6):</div>
+        <div class="toss-nums-grid">
+          <button class="toss-num-btn" data-num="0">0</button>
+          <button class="toss-num-btn" data-num="1">1</button>
+          <button class="toss-num-btn" data-num="2">2</button>
+          <button class="toss-num-btn selected" data-num="3">3</button>
+          <button class="toss-num-btn" data-num="4">4</button>
+          <button class="toss-num-btn" data-num="5">5</button>
+          <button class="toss-num-btn" data-num="6">6</button>
+        </div>
+
+        <button id="playTossBtn" class="btn-primary nav-btn" style="width: 100%; padding: 0.85rem; font-size: 1.1rem;">
+          Toss Coin &amp; Play Hand
+        </button>
+      </div>
+
+      <div id="tossStep2" style="display: none;">
+        <div id="tossResultText"></div>
+
+        <div id="tossDecisionButtons" style="display: none; gap: 1rem; justify-content: center;">
+          <button id="chooseBatBtn" class="btn-primary nav-btn" style="padding: 0.8rem 1.8rem;">
+            🏏 1. Bat First
+          </button>
+          <button id="chooseBowlBtn" class="btn-secondary nav-btn" style="padding: 0.8rem 1.8rem;">
+            🎯 2. Bowl First
+          </button>
+        </div>
+
+        <div id="compDecisionNotice" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Innings Break Modal -->
+  <div id="inningsBreakModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-icon">🔄</div>
+      <h2 class="modal-title">INNINGS BREAK</h2>
+      <p id="breakMessage" class="modal-subtitle">First innings completed</p>
+      
+      <div id="breakTargetText" style="margin-bottom: 2rem; font-size: 1.2rem;"></div>
+
+      <button id="startInn2Btn" class="btn-primary nav-btn" style="padding: 0.85rem 2rem; font-size: 1.1rem;">
+        Start 2nd Innings
+      </button>
+    </div>
+  </div>
+
+  <!-- 3. Match Over & Victory Celebration Modal -->
+  <div id="resultModal" class="modal-overlay">
+    <div class="modal-card">
+      <div id="resultIcon" class="modal-icon">🏆</div>
+      <h2 id="resultTitle" class="modal-title">MATCH FINISHED</h2>
+      <p id="resultSummaryText" style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 1.5rem;"></p>
+
+      <div id="resultScorecard"></div>
+
+      {% if not current_user %}
+        <div style="background: rgba(0, 230, 118, 0.1); border: 1px solid rgba(0, 230, 118, 0.3); border-radius: 8px; padding: 0.8rem; margin-bottom: 1.5rem; font-size: 0.85rem;">
+          💡 <strong>Want to save your match stats?</strong> <a href="{{ url_for('register') }}">Create an account</a> to appear on the leaderboard!
+        </div>
+      {% endif %}
+
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <button id="playAgainBtn" class="btn-primary nav-btn" style="padding: 0.85rem 1.8rem;">
+          🔄 Play Again
+        </button>
+        <a href="{{ url_for('index') }}" class="btn-secondary nav-btn" style="padding: 0.85rem 1.8rem; text-decoration: none;">
+          🏠 Return to Home
+        </a>
+      </div>
+    </div>
+  </div>
+
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+{% endblock %}

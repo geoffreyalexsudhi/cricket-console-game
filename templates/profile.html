@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Player Profile - {{ user.Username }} - Cricket Clash{% endblock %}
+
+{% block content %}
+<main class="container">
+
+  <!-- Profile Header Banner -->
+  <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+    <div style="display: flex; align-items: center; gap: 1.25rem;">
+      <div style="width: 72px; height: 72px; border-radius: 16px; background: #162235; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; box-shadow: 0 0 15px var(--primary-glow);">
+        🏏
+      </div>
+      <div>
+        <h1 style="font-size: 2.2rem; color: #fff; line-height: 1.1;">{{ user.Username }}</h1>
+        <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">
+          Player Profile &bull; Status: 
+          {% if user.Last_game == 'Win' %}
+            <span style="color: var(--primary); font-weight: 700;">Recent Winner 🔥</span>
+          {% elif user.Last_game == 'Lose' %}
+            <span style="color: #ff5252; font-weight: 700;">Needs Redemption ⚔️</span>
+          {% else %}
+            <span style="color: var(--accent); font-weight: 700;">Active Contender</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <a href="{{ url_for('game_arena', new=1) }}" class="btn-primary nav-btn" style="padding: 0.8rem 1.8rem; font-size: 1rem;">
+        🏏 Play New Match
+      </a>
+    </div>
+  </div>
+
+  <!-- Real Statistics Cards Grid -->
+  <div class="stats-cards-grid">
+    <div class="stat-box">
+      <div class="stat-box-num">{{ user.Games_played }}</div>
+      <div class="stat-box-label">Matches Played</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-num" style="color: var(--primary);">{{ user.No_of_wins }}</div>
+      <div class="stat-box-label">Matches Won</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-num" style="color: #ff5252;">{{ user.No_of_losses }}</div>
+      <div class="stat-box-label">Matches Lost</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-num" style="color: var(--accent);">{{ win_pct }}%</div>
+      <div class="stat-box-label">Win Rate</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-num" style="color: var(--secondary);">{{ user.Runs_scored }}</div>
+      <div class="stat-box-label">Total Runs</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-num">{{ user.Highest_score or 0 }}</div>
+      <div class="stat-box-label">Highest Score</div>
+    </div>
+  </div>
+
+  <!-- Match History Table -->
+  <section>
+    <div style="margin-bottom: 1.25rem;">
+      <h2 style="font-size: 1.8rem; color: #fff;">MATCH HISTORY</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Your completed matches and official score summaries</p>
+    </div>
+
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Format</th>
+            <th>Your Score</th>
+            <th>Opponent Score</th>
+            <th>Result</th>
+            <th>Summary</th>
+            <th>Date / Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if matches and matches|length > 0 %}
+            {% for m in matches %}
+              <tr>
+                <td style="font-weight: 700; color: #fff;">{{ m.mode }}</td>
+                <td style="color: var(--primary); font-weight: 700;">{{ m.user_score }}</td>
+                <td style="color: var(--secondary); font-weight: 700;">{{ m.computer_score }}</td>
+                <td>
+                  {% if m.result == 'Win' %}
+                    <span class="nav-badge" style="background: rgba(0, 230, 118, 0.15); color: var(--primary); border-color: rgba(0,230,118,0.4);">
+                      VICTORY
+                    </span>
+                  {% elif m.result == 'Lose' %}
+                    <span class="nav-badge" style="background: rgba(255, 23, 68, 0.15); color: #ff5252; border-color: rgba(255,23,68,0.4);">
+                      DEFEAT
+                    </span>
+                  {% else %}
+                    <span class="nav-badge" style="background: rgba(255, 171, 0, 0.15); color: var(--accent); border-color: rgba(255,171,0,0.4);">
+                      DRAW
+                    </span>
+                  {% endif %}
+                </td>
+                <td style="color: var(--text-main);">{{ m.summary }}</td>
+                <td style="color: var(--text-muted); font-size: 0.85rem;">{{ m.created_at }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 3rem;">
+                No matches played yet. <a href="{{ url_for('game_arena', new=1) }}" style="color: var(--primary); font-weight: 600;">Play your first match</a> now!
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+{% endblock %}

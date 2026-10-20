@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Cricket Clash{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <span style="font-size: 3rem;">🏏</span>
+        <h2 style="font-size: 2rem; color: #fff; margin-top: 0.5rem;">WELCOME BACK</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Login to view your stats and rank on the leaderboard</p>
+      </div>
+
+      <form method="POST" action="{{ url_for('login') }}">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Enter password (optional for legacy)" autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn-primary nav-btn" style="width: 100%; padding: 0.85rem; font-size: 1.05rem; margin-top: 1rem;">
+          Log In
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+        Don't have an account? <a href="{{ url_for('register') }}" style="color: var(--primary); font-weight: 600;">Create one free</a>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

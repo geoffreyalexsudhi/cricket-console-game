@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Tournament Championship - Cricket Clash{% endblock %}
+
+{% block content %}
+<main class="container">
+
+  <div style="text-align: center; margin-bottom: 2.5rem;">
+    <div class="hero-tag">🏆 World Knockout Cup</div>
+    <h1 style="font-size: 2.8rem; color: #fff; margin-bottom: 0.5rem;">CRICKET CLASH TOURNAMENT</h1>
+    <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 620px; margin: 0 auto;">
+      Battle through three knockout rounds against top global AI powerhouses to lift the championship trophy!
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+    
+    <!-- Stage 1: Quarter Final -->
+    <div class="mode-card featured">
+      <span class="mode-badge">Stage 1</span>
+      <div class="mode-icon">⚔️</div>
+      <h3 class="mode-title">Quarter-Final</h3>
+      <p class="mode-desc">
+        Opponent: <strong style="color: #fff;">Kiwi Thunder 🇳🇿</strong><br/>
+        Format: 2 Overs &bull; 2 Wickets Blitz. Fast-paced qualification.
+      </p>
+      <div class="mode-stats">
+        <span>⏱️ 2 Overs</span>
+        <span>🎯 2 Wickets</span>
+        <span>⚡ High Pressure</span>
+      </div>
+      <a href="{{ url_for('game_arena', mode='quick', new=1) }}" class="btn-primary nav-btn" style="text-align: center;">
+        Play Quarter-Final
+      </a>
+    </div>
+
+    <!-- Stage 2: Semi Final -->
+    <div class="mode-card">
+      <span class="mode-badge" style="background: var(--secondary); color: #000;">Stage 2</span>
+      <div class="mode-icon">🔥</div>
+      <h3 class="mode-title">Semi-Final</h3>
+      <p class="mode-desc">
+        Opponent: <strong style="color: #fff;">English Lions 🏴󠁧󠁢󠁥󠁮󠁧󠁿</strong><br/>
+        Format: 3 Overs &bull; 3 Wickets. Strategic pacing required.
+      </p>
+      <div class="mode-stats">
+        <span>⏱️ 3 Overs</span>
+        <span>🎯 3 Wickets</span>
+        <span>🛡️ Defensive Mix</span>
+      </div>
+      <a href="{{ url_for('game_arena', mode='tournament', new=1) }}" class="btn-secondary nav-btn" style="text-align: center;">
+        Play Semi-Final
+      </a>
+    </div>
+
+    <!-- Stage 3: Grand Final -->
+    <div class="mode-card">
+      <span class="mode-badge" style="background: var(--accent); color: #000;">Grand Final</span>
+      <div class="mode-icon">🏆</div>
+      <h3 class="mode-title">Championship Final</h3>
+      <p class="mode-desc">
+        Opponent: <strong style="color: #fff;">Aussie Lightning 🇦🇺</strong><br/>
+        Format: 5 Overs &bull; 4 Wickets. Full glory on the line!
+      </p>
+      <div class="mode-stats">
+        <span>⏱️ 5 Overs</span>
+        <span>🎯 4 Wickets</span>
+        <span>🥇 Championship Trophy</span>
+      </div>
+      <a href="{{ url_for('game_arena', mode='limited', new=1) }}" class="btn-secondary nav-btn" style="text-align: center;">
+        Play Grand Final
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Tournament Rules & Rewards -->
+  <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 2rem;">
+    <h3 style="font-size: 1.4rem; color: #fff; margin-bottom: 0.75rem;">Tournament Rules</h3>
+    <ul style="color: var(--text-muted); list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem;">
+      <li>One loss knocks you out! Every run and wicket counts.</li>
+      <li>All match stats automatically update your profile and leaderboard ranking.</li>
+      <li>Win all 3 stages to earn the Cricket Clash Championship Badge on your profile!</li>
+    </ul>
+  </div>
+
+</main>
+{% endblock %}
